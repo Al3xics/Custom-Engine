@@ -1,4 +1,3 @@
-<br/>
 KEYBINDS CAMERA :<br/>
 Avancer : Z<br/>
 Reculer : S<br/>
