@@ -10,28 +10,16 @@
 #include <stdexcept>
 
 namespace lve {
-    /// <summary>
-    /// Initialise une nouvelle chaîne d'échanges.
-    /// </summary>
-    /// <param name="deviceRef"></param>
-    /// <param name="extent"></param>
     LveSwapChain::LveSwapChain(LveDevice& deviceRef, VkExtent2D extent) : device{ deviceRef }, windowExtent{ extent } {
         init();
     }
-    /// <summary>
-    ///  Initialise une nouvelle chaîne d'échanges basée sur une précédente (utilisée pour gérer les changements de taille de fenêtre).
-    /// </summary>
-    /// <param name="deviceRef"></param>
-    /// <param name="extent"></param>
-    /// <param name="previous"></param>
+    
     LveSwapChain::LveSwapChain(LveDevice& deviceRef, VkExtent2D extent, std::shared_ptr<LveSwapChain>previous) : device{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous } {
         init();
         //cleanup old swap since it's no longer used
         oldSwapChain = nullptr;
     }
-    /// <summary>
-    /// Appelée dans les constructeurs pour initialiser la chaîne d'échanges en appelant plusieurs fonctions privées
-    /// </summary>
+    
     void LveSwapChain::init() {
         createSwapChain();
         createImageViews();
@@ -40,10 +28,7 @@ namespace lve {
         createFramebuffers();
         createSyncObjects();
     }
-    /// <summary>
-    /// Libère les ressources associées à la chaîne d'échanges, y compris les images, les images de profondeur, les images de vue, les tampons de rendu, etc.
-    /// Détruit également les objets de synchronisation tels que les sémaphores et les clôtures.
-    /// </summary>
+    
     LveSwapChain::~LveSwapChain() {
         for (auto imageView : swapChainImageViews) {
             vkDestroyImageView(device.getDevice(), imageView, nullptr);
@@ -74,12 +59,7 @@ namespace lve {
             vkDestroyFence(device.getDevice(), inFlightFences[i], nullptr);
         }
     }
-    /// <summary>
-    /// Acquiert l'index de l'image pour laquelle effectuer le rendu dans la chaîne d'échanges.
-    /// Utilise des sémaphores pour synchroniser l'acquisition d'images
-    /// </summary>
-    /// <param name="imageIndex"></param>
-    /// <returns></returns>
+    
     VkResult LveSwapChain::acquireNextImage(uint32_t* imageIndex) {
         vkWaitForFences(device.getDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
@@ -87,13 +67,7 @@ namespace lve {
 
         return result;
     }
-    /// <summary>
-    /// Soumet les tampons de commandes pour le rendu.
-    /// Gère les clôtures pour synchroniser le rendu
-    /// </summary>
-    /// <param name="buffers"></param>
-    /// <param name="imageIndex"></param>
-    /// <returns></returns>
+    
     VkResult LveSwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex) {
         if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE) {
             vkWaitForFences(device.getDevice(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
@@ -139,9 +113,7 @@ namespace lve {
 
         return result;
     }
-    /// <summary>
-    /// Crée la chaîne d'échanges Vulkan
-    /// </summary>
+    
     void LveSwapChain::createSwapChain() {
         SwapChainSupportDetails swapChainSupport = device.getSwapChainSupport();
 
@@ -203,9 +175,7 @@ namespace lve {
         swapChainImageFormat = surfaceFormat.format;
         swapChainExtent = extent;
     }
-    /// <summary>
-    /// Crée les images de vue pour chaque image dans la chaîne d'échanges
-    /// </summary>
+    
     void LveSwapChain::createImageViews() {
         swapChainImageViews.resize(swapChainImages.size());
         for (size_t i = 0; i < swapChainImages.size(); i++) {
@@ -225,9 +195,7 @@ namespace lve {
             }
         }
     }
-    /// <summary>
-    /// Crée le tampon de rendu Vulkan pour les images de la chaîne d'échanges
-    /// </summary>
+    
     void LveSwapChain::createRenderPass() {
         VkAttachmentDescription depthAttachment{};
         depthAttachment.format = findDepthFormat();
@@ -285,9 +253,7 @@ namespace lve {
             throw std::runtime_error("failed to create render pass!");
         }
     }
-    /// <summary>
-    /// Crée les tampons de trame Vulkan associés à chaque image
-    /// </summary>
+    
     void LveSwapChain::createFramebuffers() {
         swapChainFramebuffers.resize(imageCount());
         for (size_t i = 0; i < imageCount(); i++) {
@@ -308,9 +274,7 @@ namespace lve {
             }
         }
     }
-    /// <summary>
-    /// Crée les ressources de profondeur pour chaque image
-    /// </summary>
+    
     void LveSwapChain::createDepthResources() {
         VkFormat depthFormat = findDepthFormat();
         swapChainDepthFormat = depthFormat;
@@ -355,9 +319,7 @@ namespace lve {
             }
         }
     }
-    /// <summary>
-    /// Crée les objets de synchronisation Vulkan tels que les sémaphores et les clôtures
-    /// </summary>
+    
     void LveSwapChain::createSyncObjects() {
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
         renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -377,11 +339,7 @@ namespace lve {
             }
         }
     }
-    /// <summary>
-    /// Choisi le format de surface pour la chaîne d'échanges
-    /// </summary>
-    /// <param name="availableFormats"></param>
-    /// <returns></returns>
+    
     VkSurfaceFormatKHR LveSwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
         for (const auto& availableFormat : availableFormats) {
             if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
@@ -391,11 +349,7 @@ namespace lve {
 
         return availableFormats[0];
     }
-    /// <summary>
-    /// Choisi le mode de présentation pour la chaîne d'échanges
-    /// </summary>
-    /// <param name="availablePresentModes"></param>
-    /// <returns></returns>
+    
     VkPresentModeKHR LveSwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
         for (const auto& availablePresentMode : availablePresentModes) {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
@@ -414,11 +368,7 @@ namespace lve {
         std::cout << "Present mode: V-Sync" << std::endl;
         return VK_PRESENT_MODE_FIFO_KHR;
     }
-    /// <summary>
-    /// Choisi l'étendue pour la chaîne d'échanges
-    /// </summary>
-    /// <param name="capabilities"></param>
-    /// <returns></returns>
+    
     VkExtent2D LveSwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
             return capabilities.currentExtent;
@@ -430,10 +380,7 @@ namespace lve {
             return actualExtent;
         }
     }
-    /// <summary>
-    /// Trouve le format de profondeur pris en charge
-    /// </summary>
-    /// <returns></returns>
+    
     VkFormat LveSwapChain::findDepthFormat() {
         return device.findSupportedFormat({ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT }, VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
     }

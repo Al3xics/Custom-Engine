@@ -13,17 +13,21 @@
 #include "Sphere.hpp"
 
 namespace lve {
-    //AABB = axis-aligned bounding box
+    /**
+     * @brief Class representing an axis-aligned bounding box (AABB) used for collision detection.
+    */
     class AABB {
     public:
-        float minX;
-        float maxX;
-        float minY;
-        float maxY;
-        float minZ;
-        float maxZ;
+        float minX; /** @brief Minimum X-coordinate of the AABB. */
+        float maxX; /** @brief Maximum X-coordinate of the AABB. */
+        float minY; /** @brief Minimum Y-coordinate of the AABB. */
+        float maxY; /** @brief Maximum Y-coordinate of the AABB. */
+        float minZ; /** @brief Minimum Z-coordinate of the AABB. */
+        float maxZ; /** @brief Maximum Z-coordinate of the AABB. */
 
-        //Constructeur par défaut
+        /**
+         * @brief Default constructor initializes the AABB with zeroed coordinates.
+        */
         AABB() {
             this->minX = 0.0;
             this->maxX = 0.0;
@@ -35,7 +39,11 @@ namespace lve {
             this->maxZ = 0.0;
         }
 
-        //Constructeur avec points
+        /**
+         * @brief Constructor initializes the AABB with two points in 3D space.
+         * @param pointA : The first point.
+         * @param pointB : The second point.
+        */
         AABB(glm::vec3 pointA, glm::vec3 pointB) {
             this->minX = (pointA.x < pointB.x) ? pointA.x : pointB.x;
             this->maxX = (pointA.x > pointB.x) ? pointA.x : pointB.x;
@@ -47,7 +55,15 @@ namespace lve {
             this->maxZ = (pointA.z > pointB.z) ? pointA.z : pointB.z;
         }
 
-        //Constructeur avec valeurs direct
+        /**
+         * @brief Constructor initializes the AABB with specified coordinate values.
+         * @param minX : Minimum X-coordinate.
+         * @param maxX : Maximum X-coordinate.
+         * @param minY : Minimum Y-coordinate.
+         * @param maxY : Maximum Y-coordinate.
+         * @param minZ : Minimum Z-coordinate.
+         * @param maxZ : Maximum Z-coordinate.
+        */
         AABB(float minX, float maxX, float minY, float maxY, float minZ, float maxZ) {
             this->minX = minX;
             this->maxX = maxX;
@@ -59,7 +75,10 @@ namespace lve {
             this->maxZ = maxZ;
         }
 
-        //Constructeur par copie
+        /**
+         * @brief Copy constructor creates a new AABB with the same coordinates as the provided AABB.
+         * @param box : The AABB to be copied.
+        */
         AABB(const AABB& box) {
             this->minX = box.minX;
             this->maxX = box.maxX;
@@ -71,6 +90,11 @@ namespace lve {
             this->maxZ = box.maxZ;
         }
 
+        /**
+         * @brief Sets the coordinates of the AABB using two points in 3D space.
+         * @param pointA : The first point.
+         * @param pointB : The second point.
+        */
         void setBoxPoint(glm::vec3 pointA, glm::vec3 pointB) {
             this->minX = (pointA.x < pointB.x) ? pointA.x : pointB.x;
             this->maxX = (pointA.x > pointB.x) ? pointA.x : pointB.x;
@@ -82,7 +106,11 @@ namespace lve {
             this->maxZ = (pointA.z > pointB.z) ? pointA.z : pointB.z;
         }
 
-        //Sphère contre AABB
+        /**
+         * @brief Checks if a sphere intersects with the AABB.
+         * @param sphere : The sphere to check.
+         * @return True if the sphere intersects with the AABB, false otherwise.
+        */
         bool isIntersectSphere(Sphere sphere) {
             float x = this->max(this->minX, this->min(sphere.x, this->maxX));
             float y = this->max(this->minY, this->min(sphere.y, this->maxY));
@@ -97,7 +125,11 @@ namespace lve {
             return distance < sphere.radius;
         }
 
-        //calcule le point le plus proche de la sphère sur le cube AABB et utilise cette information pour déterminer la normale de collision. Elle renvoie la direction dans laquelle la sphère devrait se déplacer après la collision avec le cube.
+        /**
+         * @brief Calculates the normal vector for collision response with a sphere.
+         * @param sphere : The sphere involved in the collision.
+         * @return The collision normal vector.
+        */
         glm::vec3 normIntersectSphere(Sphere sphere) {
             glm::vec3 norm = { 0.f, 0.f, 0.f };
 
@@ -117,7 +149,11 @@ namespace lve {
             return norm;
         }
 
-        //AABB contre AABB
+        /**
+         * @brief Checks if two AABBs intersect.
+         * @param box : The other AABB to check against.
+         * @return True if the AABBs intersect, false otherwise.
+        */
         bool isIntersectAABB(AABB box) {
             return (
                 box.minX <= this->maxX &&
@@ -129,7 +165,11 @@ namespace lve {
                 );
         }
 
-        //détermine la quelle valeur inverser lors d'une colision entre deux cubes
+        /**
+         * @brief Determines the direction of separation for collision response between two AABBs.
+         * @param box : The other AABB involved in the collision.
+         * @return The collision normal vector.
+        */
         glm::vec3 normIntersectAABB(AABB box) {
             glm::vec3 norm = { 1.f, 1.f, 1.f };
 
@@ -153,7 +193,11 @@ namespace lve {
             return norm;
         }
 
-        //Point contre AABB
+        /**
+         * @brief Checks if a given point is inside the AABB.
+         * @param point : The point to be checked.
+         * @return True if the point is inside the AABB, false otherwise.
+        */
         bool isPointInside(glm::vec3 point) { //AABB = axis-aligned bounding box
             return (
                 point.x >= this->minX &&
@@ -166,7 +210,12 @@ namespace lve {
         }
 
     private:
-        //retourne la plus petite valeur entre a et b
+        /**
+         * @brief Returns the smaller of two floating-point values.
+         * @param a : The first value.
+         * @param b : The second value.
+         * @return The smaller of the two values.
+        */
         float min(float a, float b) {
             float res = a;
 
@@ -176,7 +225,13 @@ namespace lve {
 
             return res;
         }
-        //retourne la plus grande valeur entre a et b
+        
+        /**
+         * @brief Returns the larger of two floating-point values.
+         * @param a : The first value.
+         * @param b : The second value.
+         * @return The larger of the two values.
+        */
         float max(float a, float b) {
             float res = b;
 
@@ -187,7 +242,10 @@ namespace lve {
             return res;
         }
 
-        //renvois les coordonées du point au centre de la boite de colision
+        /**
+         * @brief Returns the coordinates of the center point of the AABB.
+         * @return The center coordinates.
+        */
         glm::vec3 center() {
             return { minX + ((minX - maxX) / 2), minY + ((minY - maxY) / 2), minZ + ((minZ - maxZ) / 2) };
         }

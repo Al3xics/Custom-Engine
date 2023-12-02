@@ -20,30 +20,16 @@ namespace lve {
         glm::mat4 modelMatrix{ 1.f };
         glm::mat4 normalMatrix{ 1.f };
     };
-    /// <summary>
-    /// Prend une référence à un objet LveDevice, un VkRenderPass et un VkDescriptorSetLayout en paramètres.
-    ///Appelle la fonction createPipelineLayout pour créer la mise en page du pipeline.
-    ///   Appelle la fonction createPipeline pour créer le pipeline de rendu
-    /// </summary>
-    /// <param name="device"></param>
-    /// <param name="renderPass"></param>
-    /// <param name="globalSetLayout"></param>
+    
     SimpleRenderSystem::SimpleRenderSystem(LveDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout) : lveDevice{ device } {
         createPipelineLayout(globalSetLayout);
         createPipeline(renderPass);
     }
-    /// <summary>
-    /// Détruit le pipeline layout Vulkan
-    /// </summary>
+    
     SimpleRenderSystem::~SimpleRenderSystem() {
         vkDestroyPipelineLayout(lveDevice.getDevice(), pipelineLayout, nullptr);
     }
-    /// <summary>
-    /// Crée la mise en page du pipeline Vulkan (pipelineLayout).
-    ///Utilise un VkPushConstantRange pour spécifier des données pouvant être modifiées entre les trames.
-    /// Utilise un ensemble de descripteurs global(globalSetLayout).
-    /// </summary>
-    /// <param name="globalSetLayout"></param>
+    
     void SimpleRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout) {
         VkPushConstantRange pushConstantRange{};
         pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -63,21 +49,12 @@ namespace lve {
         }
     }
 
-    /// <summary>
-    /// Retourne le temps actuel de la machine en secondes
-    /// </summary>
-    /// <returns></returns>
     double SimpleRenderSystem::getCurrentTime() {
         auto current_time = std::chrono::system_clock::now();
         auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
         return duration_in_seconds.count();
     }
-    /// <summary>
-    /// Crée le pipeline de rendu (lvePipeline).
-    ///Utilise la configuration du pipeline Vulkan(PipeLineConfigInfo).
-    /// Utilise les shaders vertex et fragment spécifiés
-    /// </summary>
-    /// <param name="renderPass"></param>
+    
     void SimpleRenderSystem::createPipeline(VkRenderPass renderPass) {
         assert(pipelineLayout != nullptr && "Cannot create pipeline pipeline before pipeline layout");
 
@@ -87,14 +64,7 @@ namespace lve {
         pipelineConfig.pipelineLayout = pipelineLayout;
         lvePipeline = std::make_unique<LvePipeline>(lveDevice, "./shaders/SPIR-V/simple_shader.vert.spv", "./shaders/SPIR-V/simple_shader.frag.spv", pipelineConfig);
     }
-    /// <summary>
-    /// Lie le pipeline de rendu et les ensembles de descripteurs.
-    ///Itère sur les objets de jeu dans frameInfo.gameObjects.
-    ///    Pour chaque objet :
-    ///Met à jour les constantes de poussée(push constants) avec la transformation actuelle de l'objet.
-    ///   Lie le modèle de l'objet et déclenche le dessin
-    /// </summary>
-    /// <param name="frameInfo"></param>
+    
     void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo) {
         lvePipeline->bind(frameInfo.commandBuffer);
 

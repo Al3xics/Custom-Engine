@@ -30,7 +30,6 @@
 #define SECOND 1.0
 
 namespace lve {
-
     FirstApp::FirstApp() {
         globalPool = LveDescriptorPool::Builder(lveDevice).setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
             .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, LveSwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -40,9 +39,6 @@ namespace lve {
 
     FirstApp::~FirstApp() {}
 
-    /// <summary>
-    /// Fonction principale pour exécuter l'application, gère l'initialisation, la boucle principale, et la libération des ressources.
-    /// </summary>
     void FirstApp::run() {
         std::vector < std::unique_ptr<LveBuffer>>uboBuffers(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
         for (int i = 0; i < uboBuffers.size(); i++) {
@@ -160,17 +156,12 @@ namespace lve {
         vkDeviceWaitIdle(lveDevice.getDevice());
     }
 
-    /// <summary>
-    /// Retourne le temps actuel de la machine
-    /// </summary>
-    /// <returns></returns>
     double FirstApp::getCurrentTime() {
         auto current_time = std::chrono::system_clock::now();
         auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
         return duration_in_seconds.count();
     }
 
-    // temporary helper function, creates a 1x1x1 cube centered at offset with an index buffer
     std::unique_ptr<LveModel> createCubeModel(LveDevice& device, glm::vec3 offset) {
         LveModel::Builder modelBuilder{};
         modelBuilder.vertices = {
@@ -216,9 +207,6 @@ namespace lve {
         return std::make_unique<LveModel>(device, modelBuilder);
     }
 
-    /// <summary>
-    /// chargement de tous les objects de la scène
-    /// </summary>
     void FirstApp::loadGameObjects() {
         loadCubesCollision();
 
@@ -256,9 +244,6 @@ namespace lve {
         }
     }
 
-    /// <summary>
-    /// Chargement des cubes pour la demo des colisions 
-    /// </summary>
     void FirstApp::loadCubesCollision() {
         std::shared_ptr<LveModel> lveModel = createCubeModel(lveDevice, { .0f, -4.f, -5.f });
 

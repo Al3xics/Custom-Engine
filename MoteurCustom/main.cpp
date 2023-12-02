@@ -4,6 +4,10 @@
 #include <iostream>
 #include <stdexcept>
 
+/**
+ * @brief Main function to execute the application.
+ * @return EXIT_SUCCESS if the application runs successfully, EXIT_FAILURE otherwise.
+*/
 int main() {
     // Changer "lve_swap_chain.cpp" --> "chooseSwapSurfaceFormat()" en "..._SRGB" ou "..._UNORM"
     lve::FirstApp app{};

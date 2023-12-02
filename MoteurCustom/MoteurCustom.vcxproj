@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -108,7 +108,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.268.0\Include;$(ProjectDir)glm;$(ProjectDir)glfw-3.3.8.bin.WIN64\include;$(ProjectDir)include;$(ProjectDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,16 +115,12 @@
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.268.0\Lib;$(ProjectDir)glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
+    <PreBuildEvent />
     <CustomBuildStep>
-      <Command>$(ProjectDir)shaders\compile.bat</Command>
+      <Outputs>outputShaders</Outputs>
+      <Command>.\shaders\compile.bat</Command>
     </CustomBuildStep>
-    <CustomBuildStep>
-      <Outputs>ForceCompileShaders</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -137,7 +132,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.268.0\Include;$(ProjectDir)glm;$(ProjectDir)glfw-3.3.8.bin.WIN64\include;$(ProjectDir)include;$(ProjectDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,8 +142,10 @@
       <AdditionalLibraryDirectories>C:\VulkanSDK\1.3.268.0\Lib;$(ProjectDir)glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
-      <Command>$(ProjectDir)shaders\compile.bat</Command>
+      <Outputs>outputShaders</Outputs>
+      <Command>.\shaders\compile.bat</Command>
     </CustomBuildStep>
+    <PreBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="vulkan\firstapp.cpp" />
@@ -177,6 +173,8 @@
     <ClCompile Include="vulkan\point_light_system.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="glfw-3.3.8.bin.WIN64\include\GLFW\glfw3.h" />
+    <ClInclude Include="glfw-3.3.8.bin.WIN64\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\AABB.hpp" />
     <ClInclude Include="include\Colision.hpp" />
     <ClInclude Include="include\firstapp.hpp" />
@@ -208,28 +206,197 @@
     <ClInclude Include="include\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="documentation\html\annotated.html" />
+    <None Include="documentation\html\classes.html" />
+    <None Include="documentation\html\classlve_1_1_a_a_b_b-members.html" />
+    <None Include="documentation\html\classlve_1_1_a_a_b_b.html" />
+    <None Include="documentation\html\classlve_1_1_colision-members.html" />
+    <None Include="documentation\html\classlve_1_1_colision.html" />
+    <None Include="documentation\html\classlve_1_1_first_app-members.html" />
+    <None Include="documentation\html\classlve_1_1_first_app.html" />
+    <None Include="documentation\html\classlve_1_1_keyboard_movement_controller-members.html" />
+    <None Include="documentation\html\classlve_1_1_keyboard_movement_controller.html" />
+    <None Include="documentation\html\classlve_1_1_lve_buffer-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_buffer.html" />
+    <None Include="documentation\html\classlve_1_1_lve_camera-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_camera.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_pool-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_pool.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_pool_1_1_builder-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_pool_1_1_builder.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_set_layout-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_set_layout.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_set_layout_1_1_builder-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_set_layout_1_1_builder.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_writer-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_descriptor_writer.html" />
+    <None Include="documentation\html\classlve_1_1_lve_device-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_device.html" />
+    <None Include="documentation\html\classlve_1_1_lve_game_object-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_game_object.html" />
+    <None Include="documentation\html\classlve_1_1_lve_imgui-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_imgui.html" />
+    <None Include="documentation\html\classlve_1_1_lve_model-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_model.html" />
+    <None Include="documentation\html\classlve_1_1_lve_pipeline-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_pipeline.html" />
+    <None Include="documentation\html\classlve_1_1_lve_renderer-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_renderer.html" />
+    <None Include="documentation\html\classlve_1_1_lve_swap_chain-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_swap_chain.html" />
+    <None Include="documentation\html\classlve_1_1_lve_window-members.html" />
+    <None Include="documentation\html\classlve_1_1_lve_window.html" />
+    <None Include="documentation\html\classlve_1_1_point_light_system-members.html" />
+    <None Include="documentation\html\classlve_1_1_point_light_system.html" />
+    <None Include="documentation\html\classlve_1_1_simple_render_system-members.html" />
+    <None Include="documentation\html\classlve_1_1_simple_render_system.html" />
+    <None Include="documentation\html\classlve_1_1_sphere-members.html" />
+    <None Include="documentation\html\classlve_1_1_sphere.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_file_reader-members.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_file_reader.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_reader-members.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_reader.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_stream_reader-members.html" />
+    <None Include="documentation\html\classtinyobj_1_1_material_stream_reader.html" />
+    <None Include="documentation\html\classtinyobj_1_1_obj_reader-members.html" />
+    <None Include="documentation\html\classtinyobj_1_1_obj_reader.html" />
+    <None Include="documentation\html\dir_199eb778b82ed7f0a714c167e6ffd332.html" />
+    <None Include="documentation\html\dir_371312b5839000db35fe1076378a9307.html" />
+    <None Include="documentation\html\dir_5859ef90d0995a7748065ef63e6745e6.html" />
+    <None Include="documentation\html\dir_58e919f797bf51cae7bc2bcfcd40ef8a.html" />
+    <None Include="documentation\html\dir_87febd229f9b3f478ad7a0539a7c019c.html" />
+    <None Include="documentation\html\dir_d522931ffa1371640980b621734a4381.html" />
+    <None Include="documentation\html\dir_e9fe87443faea666f4af9a955ee78881.html" />
+    <None Include="documentation\html\doc.svg" />
+    <None Include="documentation\html\docd.svg" />
+    <None Include="documentation\html\doxygen.css" />
+    <None Include="documentation\html\doxygen.svg" />
+    <None Include="documentation\html\dynsections.js" />
+    <None Include="documentation\html\files.html" />
+    <None Include="documentation\html\firstapp_8hpp_source.html" />
+    <None Include="documentation\html\folderclosed.svg" />
+    <None Include="documentation\html\folderclosedd.svg" />
+    <None Include="documentation\html\folderopen.svg" />
+    <None Include="documentation\html\folderopend.svg" />
+    <None Include="documentation\html\functions.html" />
+    <None Include="documentation\html\functions_b.html" />
+    <None Include="documentation\html\functions_c.html" />
+    <None Include="documentation\html\functions_d.html" />
+    <None Include="documentation\html\functions_e.html" />
+    <None Include="documentation\html\functions_f.html" />
+    <None Include="documentation\html\functions_func.html" />
+    <None Include="documentation\html\functions_g.html" />
+    <None Include="documentation\html\functions_h.html" />
+    <None Include="documentation\html\functions_i.html" />
+    <None Include="documentation\html\functions_l.html" />
+    <None Include="documentation\html\functions_m.html" />
+    <None Include="documentation\html\functions_n.html" />
+    <None Include="documentation\html\functions_o.html" />
+    <None Include="documentation\html\functions_p.html" />
+    <None Include="documentation\html\functions_r.html" />
+    <None Include="documentation\html\functions_rela.html" />
+    <None Include="documentation\html\functions_s.html" />
+    <None Include="documentation\html\functions_t.html" />
+    <None Include="documentation\html\functions_type.html" />
+    <None Include="documentation\html\functions_u.html" />
+    <None Include="documentation\html\functions_v.html" />
+    <None Include="documentation\html\functions_vars.html" />
+    <None Include="documentation\html\functions_w.html" />
+    <None Include="documentation\html\functions_y.html" />
+    <None Include="documentation\html\functions_z.html" />
+    <None Include="documentation\html\functions_~.html" />
+    <None Include="documentation\html\hierarchy.html" />
+    <None Include="documentation\html\index.html" />
+    <None Include="documentation\html\jquery.js" />
+    <None Include="documentation\html\lve__buffer_8hpp_source.html" />
+    <None Include="documentation\html\lve__camera_8hpp_source.html" />
+    <None Include="documentation\html\lve__descriptors_8hpp_source.html" />
+    <None Include="documentation\html\lve__device_8hpp_source.html" />
+    <None Include="documentation\html\lve__frame__info_8hpp_source.html" />
+    <None Include="documentation\html\lve__game__object_8hpp_source.html" />
+    <None Include="documentation\html\lve__imgui_8hpp_source.html" />
+    <None Include="documentation\html\lve__model_8hpp_source.html" />
+    <None Include="documentation\html\lve__pipeline_8hpp_source.html" />
+    <None Include="documentation\html\lve__renderer_8hpp_source.html" />
+    <None Include="documentation\html\lve__simple__render__system_8hpp_source.html" />
+    <None Include="documentation\html\lve__swap__chain_8hpp_source.html" />
+    <None Include="documentation\html\lve__utils_8hpp_source.html" />
+    <None Include="documentation\html\lve__window_8hpp_source.html" />
+    <None Include="documentation\html\menu.js" />
+    <None Include="documentation\html\menudata.js" />
+    <None Include="documentation\html\minus.svg" />
+    <None Include="documentation\html\minusd.svg" />
+    <None Include="documentation\html\plus.svg" />
+    <None Include="documentation\html\plusd.svg" />
+    <None Include="documentation\html\point__light__system_8hpp_source.html" />
+    <None Include="documentation\html\structlve_1_1_frame_info-members.html" />
+    <None Include="documentation\html\structlve_1_1_frame_info.html" />
+    <None Include="documentation\html\structlve_1_1_global_ubo-members.html" />
+    <None Include="documentation\html\structlve_1_1_global_ubo.html" />
+    <None Include="documentation\html\structlve_1_1_keyboard_movement_controller_1_1_key_mappings-members.html" />
+    <None Include="documentation\html\structlve_1_1_keyboard_movement_controller_1_1_key_mappings.html" />
+    <None Include="documentation\html\structlve_1_1_lve_model_1_1_builder-members.html" />
+    <None Include="documentation\html\structlve_1_1_lve_model_1_1_builder.html" />
+    <None Include="documentation\html\structlve_1_1_lve_model_1_1_vertex-members.html" />
+    <None Include="documentation\html\structlve_1_1_lve_model_1_1_vertex.html" />
+    <None Include="documentation\html\structlve_1_1_pipe_line_config_info-members.html" />
+    <None Include="documentation\html\structlve_1_1_pipe_line_config_info.html" />
+    <None Include="documentation\html\structlve_1_1_point_light-members.html" />
+    <None Include="documentation\html\structlve_1_1_point_light.html" />
+    <None Include="documentation\html\structlve_1_1_point_light_component-members.html" />
+    <None Include="documentation\html\structlve_1_1_point_light_component.html" />
+    <None Include="documentation\html\structlve_1_1_queue_family_indices-members.html" />
+    <None Include="documentation\html\structlve_1_1_queue_family_indices.html" />
+    <None Include="documentation\html\structlve_1_1_swap_chain_support_details-members.html" />
+    <None Include="documentation\html\structlve_1_1_swap_chain_support_details.html" />
+    <None Include="documentation\html\structlve_1_1_transform_component-members.html" />
+    <None Include="documentation\html\structlve_1_1_transform_component.html" />
+    <None Include="documentation\html\structtinyobj_1_1attrib__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1attrib__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1callback__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1callback__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1index__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1index__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1joint__and__weight__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1joint__and__weight__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1lines__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1lines__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1material__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1material__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1mesh__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1mesh__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1points__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1points__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1shape__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1shape__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1skin__weight__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1skin__weight__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1tag__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1tag__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1texture__option__t-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1texture__option__t.html" />
+    <None Include="documentation\html\structtinyobj_1_1_obj_reader_config-members.html" />
+    <None Include="documentation\html\structtinyobj_1_1_obj_reader_config.html" />
+    <None Include="documentation\html\tabs.css" />
+    <None Include="documentation\html\tiny__obj__loader_8h_source.html" />
+    <None Include="documentation\html\_a_a_b_b_8hpp_source.html" />
+    <None Include="documentation\html\_colision_8hpp_source.html" />
+    <None Include="documentation\html\_keyboard__movement__controller_8hpp_source.html" />
+    <None Include="documentation\html\_sphere_8hpp_source.html" />
+    <None Include="documentation\index.html - Raccourci.lnk" />
+    <None Include="glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" />
     <None Include="imgui.ini" />
-    <None Include="shaders\compile.bat" />
     <None Include="imgui\.editorconfig" />
     <None Include="imgui\.gitattributes" />
     <None Include="imgui\.gitignore" />
+    <None Include="shaders\compile.bat" />
     <None Include="shaders\point_light.frag" />
+    <None Include="shaders\point_light.vert" />
+    <None Include="shaders\simple_shader.frag" />
+    <None Include="shaders\simple_shader.vert" />
     <None Include="shaders\SPIR-V\point_light.frag.spv" />
-    <None Include="shaders\point_light.vert">
-      <FileType>Document</FileType>
-    </None>
     <None Include="shaders\SPIR-V\point_light.vert.spv" />
-    <None Include="shaders\simple_shader.frag">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\VulkanSDK\1.3.268.0\Bin\glslc.exe "simple_shader.frag" -o simple_shader.frag.spv</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"simple_shader.vert.spv";%(Outputs)</Outputs>
-    </None>
     <None Include="shaders\SPIR-V\simple_shader.frag.spv" />
-    <None Include="shaders\simple_shader.vert">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\VulkanSDK\1.3.268.0\Bin\glslc.exe "simple_shader.vert" -o simple_shader.vert.spv</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"simple_shader.vert.spv";%(Outputs)</Outputs>
-    </None>
     <None Include="shaders\SPIR-V\simple_shader.vert.spv" />
   </ItemGroup>
   <ItemGroup>
@@ -265,7 +432,32 @@
     <Text Include="imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="documentation xml\MoteurCustom.xml" />
+    <Library Include="glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.lib" />
+    <Library Include="glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3dll.lib" />
+    <Library Include="glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3_mt.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="documentation\html\bc_s.png" />
+    <Image Include="documentation\html\bc_sd.png" />
+    <Image Include="documentation\html\closed.png" />
+    <Image Include="documentation\html\nav_f.png" />
+    <Image Include="documentation\html\nav_fd.png" />
+    <Image Include="documentation\html\nav_g.png" />
+    <Image Include="documentation\html\nav_h.png" />
+    <Image Include="documentation\html\nav_hd.png" />
+    <Image Include="documentation\html\open.png" />
+    <Image Include="documentation\html\splitbar.png" />
+    <Image Include="documentation\html\splitbard.png" />
+    <Image Include="documentation\html\sync_off.png" />
+    <Image Include="documentation\html\sync_on.png" />
+    <Image Include="documentation\html\tab_a.png" />
+    <Image Include="documentation\html\tab_ad.png" />
+    <Image Include="documentation\html\tab_b.png" />
+    <Image Include="documentation\html\tab_bd.png" />
+    <Image Include="documentation\html\tab_h.png" />
+    <Image Include="documentation\html\tab_hd.png" />
+    <Image Include="documentation\html\tab_s.png" />
+    <Image Include="documentation\html\tab_sd.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

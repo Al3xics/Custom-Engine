@@ -9,28 +9,16 @@
 
 
 namespace lve {
-    /// <summary>
-    /// Prend une référence à un objet LveWindow et un objet LveDevice en paramètres.
-    ///Appelle les fonctions recreateSwapChain et createCommandBuffers pour initialiser le rendu
-    /// </summary>
-    /// <param name="window"></param>
-    /// <param name="device"></param>
     LveRenderer::LveRenderer(LveWindow& window, LveDevice& device) : lveWindow{ window }, lveDevice{ device } {
         recreateSwapChain();
         createCommandBuffers();
 
     }
-    /// <summary>
-    /// Appelle la fonction freeCommandBuffers pour libérer les tampons de commandes
-    /// </summary>
+    
     LveRenderer::~LveRenderer() {
         freeCommandBuffers();
     }
-    /// <summary>
-    ///Obtient la taille de la fenêtre et attend que la taille ne soit pas nulle.
-    ///Attend que le périphérique Vulkan termine les opérations en cours.
-    ///Recrée ou initialise la chaîne d'échange Vulkan (LveSwapChain)
-    /// </summary>
+    
     void LveRenderer::recreateSwapChain() {
         auto extent = lveWindow.getExtent();
         while (extent.width == 0 || extent.height == 0) {
@@ -51,10 +39,7 @@ namespace lve {
 
         }
     }
-    /// <summary>
-    /// Alloue les tampons de commandes nécessaires pour l'exécution des commandes GPU.
-    ///Utilise la classe LveSwapChain pour déterminer le nombre maximal de tampons de commandes en vol
-    /// </summary>
+    
     void LveRenderer::createCommandBuffers() {
         commandBuffers.resize(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
 
@@ -68,19 +53,12 @@ namespace lve {
             throw std::runtime_error("failed to allocate command buffers!");
         }
     }
-    /// <summary>
-    /// Libère les tampons de commandes Vulkan
-    /// </summary>
+    
     void LveRenderer::freeCommandBuffers() {
         vkFreeCommandBuffers(lveDevice.getDevice(), lveDevice.getCommandPool(), static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
         commandBuffers.clear();
     }
-    /// <summary>
-    /// Acquiert l'image suivante de la chaîne d'échange.
-    ///Vérifie si la chaîne d'échange a besoin d'être recréée en cas de redimensionnement de la fenêtre.
-    ///  Commence l'enregistrement des commandes pour le tampon de commande actuel
-    /// </summary>
-    /// <returns></returns>
+    
     VkCommandBuffer LveRenderer::beginFrame() {
         assert(!isFrameStarted && "Can't call beginFrame while already in progress");
         auto result = lveSwapChain->acquireNextImage(&currentImageIndex);
@@ -101,11 +79,7 @@ namespace lve {
         }
         return commandBuffer;
     }
-    /// <summary>
-    /// Termine l'enregistrement des commandes pour le tampon de commande actuel.
-    /// Soumet les commandes au GPU via la chaîne d'échange.
-    /// Vérifie si la chaîne d'échange doit être recréée en cas de redimensionnement de la fenêtre
-    /// </summary>
+    
     void LveRenderer::endFrame() {
         assert(isFrameStarted && "Can't call endFrame while frame is not in progress");
         auto commandBuffer = getCurrentCommandBuffer();
@@ -123,11 +97,7 @@ namespace lve {
         isFrameStarted = false;
         currentFrameIndex = (currentFrameIndex + 1) % LveSwapChain::MAX_FRAMES_IN_FLIGHT;
     }
-    /// <summary>
-    /// Commence une passe de rendu pour la chaîne d'échange actuelle.
-    ///Configure les paramètres de la passe de rendu, tels que la couleur de fond
-    /// </summary>
-    /// <param name="commandBuffer"></param>
+    
     void LveRenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
         assert(isFrameStarted && "Can't call beginSwapChainRenderPass if frame is not in progress");
         assert(commandBuffer == getCurrentCommandBuffer() && "Can begin render pass on command buffer from a different frame");
@@ -158,10 +128,7 @@ namespace lve {
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
     }
-    /// <summary>
-    /// Termine la passe de rendu pour la chaîne d'échange actuelle
-    /// </summary>
-    /// <param name="commandBuffer"></param>
+    
     void LveRenderer::endSwapChainRenderPass(VkCommandBuffer commandBuffer) {
         assert(isFrameStarted && "Can't call endSwapChainRenderPass if frame is not in progress");
         assert(commandBuffer == getCurrentCommandBuffer() && "Can end render pass on command buffer from a different frame");

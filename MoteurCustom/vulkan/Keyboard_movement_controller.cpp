@@ -1,12 +1,6 @@
 #include "Keyboard_movement_controller.hpp"
 
 namespace lve {
-    /// <summary>
-    /// Implémente la logique de déplacement et de rotation de l'objet en fonction des touches du clavier et du temps écoulé depuis la dernière mise à jour.
-    /// </summary>
-    /// <param name="window"></param>
-    /// <param name="dt"></param>
-    /// <param name="gameObject"></param>
     void KeyboardMovementController::moveInPanelXZ(GLFWwindow* window, float dt, LveGameObject& gameObject) {
         glm::vec3 rotate{ 0 };
         if (glfwGetKey(window, keys.lookRight) == GLFW_PRESS) rotate.y += 1.0f;

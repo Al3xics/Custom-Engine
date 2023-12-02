@@ -6,30 +6,16 @@
 #include <cassert>
 
 namespace lve {
-    /// <summary>
-    /// Prend une référence à un objet LveDevice, les chemins des fichiers des shaders vertex et fragment, ainsi qu'une structure PipeLineConfigInfo en paramètres.
-    ///Appelle la fonction createGraphicsPipeline pour créer le pipeline graphique Vulkan
-    /// </summary>
-    /// <param name="device"></param>
-    /// <param name="vertFilePath"></param>
-    /// <param name="fragFilePath"></param>
-    /// <param name="configInfo"></param>
     LvePipeline::LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipeLineConfigInfo& configInfo) : lveDevice{ device } {
         createGraphicsPipeline(vertFilePath, fragFilePath, configInfo);
     }
-    /// <summary>
-    /// Détruit les modules de shader et le pipeline graphique
-    /// </summary>
+    
     LvePipeline::~LvePipeline() {
         vkDestroyShaderModule(lveDevice.getDevice(), vertShaderModule, nullptr);
         vkDestroyShaderModule(lveDevice.getDevice(), fragShaderModule, nullptr);
         vkDestroyPipeline(lveDevice.getDevice(), graphicsPipeline, nullptr);
     }
-    /// <summary>
-    /// Prend un chemin de fichier en paramètre et retourne le contenu du fichier sous forme de vecteur de caractères
-    /// </summary>
-    /// <param name="filepath"></param>
-    /// <returns></returns>
+    
     std::vector<char> LvePipeline::readFile(const std::string& filepath) {
         std::ifstream file(filepath, std::ios::ate | std::ios::binary);
 
@@ -49,14 +35,7 @@ namespace lve {
 
         return buffer;
     }
-    /// <summary>
-    /// Lit le code source des shaders depuis les fichiers spécifiés.
-    ///Crée les modules de shader et les étapes du pipeline graphique Vulkan.
-    ///    Utilise la configuration fournie(PipeLineConfigInfo) pour spécifier divers paramètres du pipeline
-    /// </summary>
-    /// <param name="vertFilepath"></param>
-    /// <param name="fragFilepath"></param>
-    /// <param name="configInfo"></param>
+    
     void LvePipeline::createGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipeLineConfigInfo& configInfo) {
         assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
         assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
@@ -116,11 +95,7 @@ namespace lve {
             throw std::runtime_error("failed to create graphics pipeline");
         }
     }
-    /// <summary>
-    /// Crée un module de shader Vulkan à partir du code source du shader
-    /// </summary>
-    /// <param name="code"></param>
-    /// <param name="shaderModule"></param>
+    
     void LvePipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -131,17 +106,11 @@ namespace lve {
             throw std::runtime_error("failed to create shader module");
         }
     }
-    /// <summary>
-    /// Lie le pipeline graphique au tampon de commandes Vulkan spécifié
-    /// </summary>
-    /// <param name="VkCommandBuffer"></param>
+    
     void LvePipeline::bind(VkCommandBuffer(commandBuffer)) {
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
     }
-    /// <summary>
-    /// Initialise une structure PipeLineConfigInfo avec des valeurs par défaut
-    /// </summary>
-    /// <param name="configInfo"></param>
+    
     void LvePipeline::defaultPipeLineConfigInfo(PipeLineConfigInfo& configInfo) {
         configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -213,10 +182,7 @@ namespace lve {
         configInfo.bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
         configInfo.attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
     }
-    /// <summary>
-    /// Active le mélange alpha dans la configuration du pipeline
-    /// </summary>
-    /// <param name="configInfo"></param>
+    
     void LvePipeline::enableAlphaBlending(PipeLineConfigInfo& configInfo) {
         configInfo.colorBlendAttachment.blendEnable = VK_TRUE;
         configInfo.colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;

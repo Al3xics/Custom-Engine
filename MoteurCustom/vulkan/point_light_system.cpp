@@ -23,28 +23,15 @@ namespace lve {
         float radius;
     };
 
-    /// <summary>
-    /// Constructeur initialisant le système avec un périphérique logique, un passe de rendu Vulkan, et une mise en page de descripteurs globaux.
-    /// </summary>
-    /// <param name="device"></param>
-    /// <param name="renderPass"></param>
-    /// <param name="globalSetLayout"></param>
     PointLightSystem::PointLightSystem(LveDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout) : lveDevice{ device } {
         createPipelineLayout(globalSetLayout);
         createPipeline(renderPass);
     }
 
-    /// <summary>
-    /// Destructeur
-    /// </summary>
     PointLightSystem::~PointLightSystem() {
         vkDestroyPipelineLayout(lveDevice.getDevice(), pipelineLayout, nullptr);
     }
 
-    /// <summary>
-    /// Crée la mise en page du pipeline.
-    /// </summary>
-    /// <param name="globalSetLayout"></param>
     void PointLightSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout) {
         VkPushConstantRange pushConstantRange{};
         pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -64,21 +51,12 @@ namespace lve {
         }
     }
 
-    /// <summary>
-    /// Retourne le temps actuel de la machine
-    /// </summary>
-    /// <returns></returns>
     double PointLightSystem::getCurrentTime() {
         auto current_time = std::chrono::system_clock::now();
         auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
         return duration_in_seconds.count();
     }
 
-    /// <summary>
-    /// Met à jour les informations sur les lumières à chaque frame.
-    /// </summary>
-    /// <param name="frameInfo"></param>
-    /// <param name="ubo"></param>
     void PointLightSystem::update(FrameInfo& frameInfo, GlobalUbo& ubo) {
         auto rotateLight = glm::rotate(glm::mat4(1.f), frameInfo.frameTime, { 0.f, -1.f, 0.f });
 
@@ -101,10 +79,6 @@ namespace lve {
         ubo.numLights = lightIndex;
     }
 
-    /// <summary>
-    /// Crée le pipeline graphique pour le système de lumières ponctuelles.
-    /// </summary>
-    /// <param name="renderPass"></param>
     void PointLightSystem::createPipeline(VkRenderPass renderPass) {
         assert(pipelineLayout != nullptr && "Cannot create pipeline pipeline before pipeline layout");
 
@@ -118,10 +92,6 @@ namespace lve {
         lvePipeline = std::make_unique<LvePipeline>(lveDevice, "./shaders/SPIR-V/point_light.vert.spv", "./shaders/SPIR-V/point_light.frag.spv", pipelineConfig);
     }
 
-    /// <summary>
-    /// Effectue le rendu des lumières ponctuelles.
-    /// </summary>
-    /// <param name="frameInfo"></param>
     void PointLightSystem::render(FrameInfo& frameInfo) {
         // sort lights
         std::map<float, LveGameObject::id_t> sorted;

@@ -15,10 +15,6 @@
 
 namespace std {
     template<>
-    /// <summary>
-    /// Contient des données de vertex telles que position, couleur, normale et coordonnées de texture.
-    /// Possède des méthodes statiques(getBindingDescriptions et getAttributeDescriptions) pour décrire les données de vertex pour Vulkan
-    /// </summary>
     struct hash<lve::LveModel::Vertex> {
         size_t operator()(lve::LveModel::Vertex const& vertex) const {
             size_t seed = 0;
@@ -29,20 +25,11 @@ namespace std {
 }
 
 namespace lve {
-    /// <summary>
-    /// Prend une référence à un objet LveDevice et un objet Builder en paramètre.
-    ///Appelle les fonctions createVertexBuffers et createIndexBuffers pour créer les tampons de vertex et d'indices respectivement
-    /// </summary>
-    /// <param name="device"></param>
-    /// <param name="builder"></param>
     LveModel::LveModel(LveDevice& device, const LveModel::Builder& builder) : lveDevice{ device } {
         createVertexBuffers(builder.vertices);
         createIndexBuffers(builder.indices);
     }
-    /// <summary>
-    /// Détruit l'objet LveModel.
-    ///Les tampons de vertex et d'indices sont détruits automatiquement car ce sont des objets std::unique_ptr
-    /// </summary>
+    
     LveModel::~LveModel() {}
 
     std::unique_ptr <LveModel> LveModel::createModelFromFile(LveDevice& device, const std::string& filePath) {
@@ -52,11 +39,7 @@ namespace lve {
 
         return std::make_unique<LveModel>(device, builder);
     }
-    /// <summary>
-    /// Prend un vecteur de Vertex en paramètre.
-    ///Alloue un tampon de vertex sur le GPU après avoir utilisé un tampon temporaire pour transférer les données depuis le CPU
-    /// </summary>
-    /// <param name="vertices"></param>
+    
     void LveModel::createVertexBuffers(const std::vector<Vertex>& vertices) {
         vertexCount = static_cast<uint32_t>(vertices.size());
         assert(vertexCount >= 3 && "Vertex count must be at least 3");
@@ -72,12 +55,7 @@ namespace lve {
 
         lveDevice.copyBuffer(stagingBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
     }
-    /// <summary>
-    /// Prend un vecteur d'indices en paramètre.
-    ///Alloue un tampon d'indices sur le GPU après avoir utilisé un tampon temporaire pour transférer les données depuis le CPU.
-    /// Vérifie si l'objet LveModel a un tampon d'indices(s'il y a des indices)
-    /// </summary>
-    /// <param name="indices"></param>
+    
     void LveModel::createIndexBuffers(const std::vector<uint32_t>& indices) {
         indexCount = static_cast<uint32_t>(indices.size());
         hasIndexBuffer = indexCount > 0;
@@ -97,10 +75,7 @@ namespace lve {
 
         lveDevice.copyBuffer(stagingBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
     }
-    /// <summary>
-    /// Appelle vkCmdDrawIndexed ou vkCmdDraw en fonction de la présence d'un tampon d'indices
-    /// </summary>
-    /// <param name="commandBuffer"></param>
+    
     void LveModel::draw(VkCommandBuffer commandBuffer) {
         if (hasIndexBuffer) {
             vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
@@ -108,10 +83,7 @@ namespace lve {
             vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
         }
     }
-    /// <summary>
-    /// Appelle vkCmdBindVertexBuffers et vkCmdBindIndexBuffer pour lier les tampons au pipeline de rendu
-    /// </summary>
-    /// <param name="commandBuffer"></param>
+    
     void LveModel::bind(VkCommandBuffer commandBuffer) {
         VkBuffer buffers[] = { vertexBuffer->getBuffer() };
         VkDeviceSize offset[] = { 0 };
@@ -137,12 +109,7 @@ namespace lve {
         attributeDescriptions.push_back({ 3,0,VK_FORMAT_R32G32_SFLOAT,offsetof(Vertex, uv) });
         return attributeDescriptions;
     }
-    /// <summary>
-    /// Contient une méthode loadModel qui utilise la bibliothèque TinyObjLoader pour charger un modèle à partir d'un fichier OBJ.
-    /// Remplit le vecteur de vertices(vertices) et d'indices (indices) à partir des données du fichier OBJ.
-    /// Utilise un dictionnaire std::unordered_map pour garantir l'unicité des vertices
-    /// </summary>
-    /// <param name="filepath"></param>
+    
     void LveModel::Builder::loadModel(const std::string& filepath) {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
