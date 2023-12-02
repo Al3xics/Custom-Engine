@@ -13,12 +13,10 @@ KEYBINDS CAMERA :
 - Gauche : Q
 - Haut : A
 - Bas : E
-<br/>
 - Rotation vers le haut : UP_ARROW
 - Rotation vers le bas : DOWN_ARROW
 - Rotation vers la droite : RIGHT_ARROW
 - Rotation vers la gauche : LEFT_ARROW
-<br/>
 - Reset la position du cube dans la scène : SPACE
 - Pour la rotation, les valeures limites sont -3(-180°) et 3(+180°), donc 1.5(90°) et -1.5(-90°)
 <br/>
